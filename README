@@ -1,0 +1,35 @@
+Copyright (C) 2017 Antonin Houska
+
+This file is part of MetaPostgres.
+
+MetaPostgres is free software: you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation, either version 3 of the License, or (at your option) any later
+version.
+
+MetaPostgres is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with
+MetaPostgres. If not, see <http://www.gnu.org/licenses/>.
+
+
+MetaPostgres is a set of set of MetaPost macros to depict internals of
+PostgreSQL database server.
+
+If you want to use it, please make sure you have both MetaPost language
+and TeX typesetting system --- see http://www.tug.org/ for information on both
+if you're not familiar with them.
+
+TeX is used only to typeset labels, so the plain TeX is sufficient. In
+practice, if you download MetaPost from your OS repository (typically in the
+RPM format), you'll probably find out that MetaPost depends on TeX, so TeX
+gets installed automatically too.
+
+The simplest use looks like:
+
+cd examples
+mpost -s 'outputformat="svg"' -s 'outputtemplate="%j.svg"' -mem=internalvars \
+-s 'finalscale=100' plan_tree_01.mp
+
