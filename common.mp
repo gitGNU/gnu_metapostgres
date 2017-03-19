@@ -65,26 +65,21 @@ numeric labelborderx, labelbordery;
 labelborderx := 6pt;
 labelbordery := 2pt;
 
-% Add equations to a label bounding box (b) so that label picture (l) can be
-% put into it. (The equations only involve corners of the picture. User is
-% responsible for positioning the whole label within the picture.)
-%
-% TODO Use the macro in query.mp and try to adjust that module so that only
-% one parameter needs to be passed to the macro, and do the same for
-% drawlabel() -- 2 identical parameters are are currently passed to
-% drawlabel(), but not always.
-def finalizelabel(text l, b) =
-  b.ne = b.nw + (xpart(lrcorner l - llcorner l) + 2labelborderx, 0);
-  b.sw = b.nw - (0, ypart(ulcorner l - llcorner l) + 2labelbordery);
-  b.se = (xpart b.ne, ypart b.sw);
+% Add equations to a label bounding box so that label picture can be put into
+% it. (The equations only involve corners of the picture. User is responsible
+% for positioning the whole label within the picture.)
+def finalizelabel(text l) =
+  l.ne = l.nw + (xpart(lrcorner l - llcorner l) + 2labelborderx, 0);
+  l.sw = l.nw - (0, ypart(ulcorner l - llcorner l) + 2labelbordery);
+  l.se = (xpart l.ne, ypart l.sw);
 enddef;
 
-% Put label "l" (in a form of picture) into box "b", centered both
+% Put label "l" (in a form of picture) into its box, centered both
 % horizontally and vertically.
-def drawlabel(text l, b) =
+def drawlabel(text l) =
   draw l shifted (
       % First, find the middle point of the lower edge ...
-      (b.se + b.sw) / 2 -
+      (l.se + l.sw) / 2 -
       % ... then shift the lower left corner of the letter horizontally ...
       (lrcorner l - llcorner l) / 2 +
       % ... and move it the text upwards vertically.

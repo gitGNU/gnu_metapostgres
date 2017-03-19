@@ -119,12 +119,12 @@ def finalizeplannode(suffix pidx) =
 
   % Name label.
   plannodes.pidx.name.nw = plannodes.pidx.nw + (planborder, -planborder);
-  finalizelabel(plannodes.pidx.name)(plannodes.pidx.name);
+  finalizelabel(plannodes.pidx.name);
 
   % Qualifier, if there is one.
   if known plannodes.pidx.qual:
     plannodes.pidx.qual.nw = plannodes.pidx.name.sw - (0, planborder);
-    finalizelabel(plannodes.pidx.qual)(plannodes.pidx.qual);
+    finalizelabel(plannodes.pidx.qual);
   fi;
 
   % Points where the input nodes should get connected.
@@ -170,9 +170,9 @@ def drawplannode(suffix pidx) =
   draw plannodes.pidx.sw--plannodes.pidx.nw--plannodes.pidx.ne--
     plannodes.pidx.se--cycle;
 
-  drawlabel(plannodes.pidx.name)(plannodes.pidx.name);
+  drawlabel(plannodes.pidx.name);
   if known plannodes.pidx.qual:
-    drawlabel(plannodes.pidx.qual)(plannodes.pidx.qual);
+    drawlabel(plannodes.pidx.qual);
   fi;
 enddef;
 

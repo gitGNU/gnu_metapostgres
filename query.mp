@@ -286,7 +286,7 @@ def drawtable(text t) =
     pickup colpen;
     draw p;
 
-    drawlabel(t.col[i])(t.col[i]);
+    drawlabel(t.col[i]);
   endfor;
 
   % Likewise, box for the table name ... (Not sure if this component deserves
@@ -297,7 +297,7 @@ def drawtable(text t) =
   fill p withcolor tablenamebgcolor;
 
   % ... and the name itself.
-  drawlabel(t.name)(t.name);
+  drawlabel(t.name);
 enddef;
 
 % Create box to contain relations as well as (ANDed) qualifiers.
@@ -310,7 +310,7 @@ def createjoin(text j) =
   numeric j.height;
 
   % Per-qualifier labels.
-  picture j.qual[].lbl;
+  picture j.qual[];
 
   % Per-qualifier points.
   pair j.qual[].n, j.qual[].w, j.qual[].s, j.qual[].e, j.qual[].nw,
@@ -331,7 +331,7 @@ enddef;
 
 % Add label and equations to operator box.
 def finalizequal(text q, oppic) =
-  q.lbl := oppic;
+  q := oppic;
   q.nw + (opwidth, 0) = q.ne;
   q.sw + (opwidth, 0) = q.se;
   q.ne - (0, opheight) = q.se;
@@ -464,7 +464,7 @@ def drawopbox(text op) =
   fill p withcolor opboxbgcolor;
   draw p;
 
-  drawlabel(op.lbl)(op);
+  drawlabel(op);
 enddef;
 
 def drawjoin(text j) =
@@ -515,19 +515,19 @@ def drawjoin(text j) =
     draw p;
 
     pickup arrowpen;
-    drawlabel(j.col[i])(j.col[i]);
+    drawlabel(j.col[i]);
   endfor;
 
   % Name
   fill j.name.nw--j.name.sw--j.name.se--j.name.ne--cycle
     withcolor joinnamebgcolor;
-  drawlabel(j.name)(j.name);
+  drawlabel(j.name);
 enddef;
 
 % Create variables that represent FROM list of a query.
 def createfromlist(text q) =
   % Per-qualifier labels.
-  picture q.fromlist.qual[].lbl;
+  picture q.fromlist.qual[];
 
   pair q.fromlist.nw, q.fromlist.sw, q.fromlist.se, q.fromlist.ne;
 
@@ -697,14 +697,14 @@ def drawquery(text q) =
     pickup colpen;
     draw p;
 
-    drawlabel(q.col[i])(q.col[i]);
+    drawlabel(q.col[i]);
   endfor;
 
   % Name
   if known q.name:
     fill q.name.nw--q.name.sw--q.name.se--q.name.ne--cycle
       withcolor querynamebgcolor;
-    drawlabel(q.name)(q.name);
+    drawlabel(q.name);
   fi;
 enddef;
 
@@ -722,7 +722,7 @@ enddef;
 % Consider remembering the number of qualifiers per relation pair and deriving
 % "row" automatically.
 vardef addwherequal@#(text l, cl, r, cr, row, oppic) =
-  @#.fromlist.qual[@#.fromlist.nquals].lbl := oppic;
+  @#.fromlist.qual[@#.fromlist.nquals] := oppic;
 
   % Qualifier box and the referenced table should never overlap.
   %
@@ -809,7 +809,7 @@ def drawwherequals(text q) =
     % Qualifier
     drawopbox(q.fromlist.qual[i]);
 
-    drawlabel(q.fromlist.qual[i].lbl)(q.fromlist.qual[i]);
+    drawlabel(q.fromlist.qual[i]);
 
     % Arrows to the referenced columns.
     pickup arrowpen;
@@ -821,12 +821,12 @@ enddef;
 def createquery(text q) =
   % WHERE qualifiers which don't reference 2 tables, or can't be positioned
   % automatically.
-  picture q.loosequal[].lbl;
+  picture q.loosequal[];
   pair q.loosequal[].n, q.loosequal[].w, q.loosequal[].s, q.loosequal[].e, q.loosequal[].nw, q.loosequal[].sw, q.loosequal[].se, q.loosequal[].ne;
   numeric q.nloosequals;
 
   % Constants.
-  picture q.const[].lbl;
+  picture q.const[];
   pair q.const[].n, q.const[].w, q.const[].s, q.const[].e, q.const[].nw, q.const[].sw, q.const[].se, q.const[].ne;
   numeric q.nconsts;
 
@@ -842,7 +842,7 @@ enddef;
 % picture source code.
 vardef addloosewherequal@#(text oppic) =
   finalizequal(@#.loosequal[@#.nloosequals])(oppic);
-  @#.loosequal[@#.nloosequals].lbl := oppic;
+  @#.loosequal[@#.nloosequals] := oppic;
   @#.nloosequals := incr(@#.nloosequals);
 enddef;
 
@@ -853,14 +853,14 @@ def drawloosewherequals(text q) =
 
   for i=0 upto q.nloosequals - 1:
     drawopbox(q.loosequal[i]);
-    drawlabel(q.loosequal[i].lbl)(q.loosequal[i]);
+    drawlabel(q.loosequal[i]);
   endfor;
 enddef;
 
 % XXX This is similar to finalizequal(). Does it make sense to make that macro
 % more generic?
 def finalizeconst(text q, oppic) =
-  q.lbl := oppic;
+  q := oppic;
   q.nw + (getcolwidth(oppic), 0) = q.ne;
   q.sw + (getcolwidth(oppic), 0) = q.se;
   q.ne - (0, colheight) = q.se;
@@ -875,7 +875,7 @@ enddef;
 vardef addconst@#(text valuepic) =
   finalizeconst(@#.const[@#.nconsts])(valuepic);
 
-  @#.const[@#.nconsts].lbl := valuepic;
+  @#.const[@#.nconsts] := valuepic;
   @#.nconsts := incr(@#.nconsts);
 enddef;
 
@@ -892,7 +892,7 @@ def drawconsts(text q) =
     pickup oppen;
     drawconst(q.const[i]);
 
-    drawlabel(q.const[i].lbl)(q.const[i]);
+    drawlabel(q.const[i]);
   endfor;
 enddef;
 

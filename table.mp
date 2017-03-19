@@ -166,7 +166,7 @@ def finalizetable(suffix tidx) =
 
   if known tables.tidx.name:
     tables.tidx.name.sw = tables.tidx.sw + (tbouterspacing, tbouterspacing);
-    finalizelabel(tables.tidx.name)(tables.tidx.name);
+    finalizelabel(tables.tidx.name);
   fi;
 
   tables.tidx.maxrowwidth := tables.tidx.rowwidth;
@@ -253,7 +253,7 @@ def drawtable(suffix tidx) =
   if known tables.tidx.name:
     draw tables.tidx.name.sw--tables.tidx.name.nw--tables.tidx.name.ne--
       tables.tidx.name.se--cycle;
-    drawlabel(tables.tidx.name)(tables.tidx.name);
+    drawlabel(tables.tidx.name);
   fi;
 enddef;
 
