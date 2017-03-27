@@ -17,7 +17,7 @@ The simplest use looks like:
 
 cd examples
 mpost -s 'outputformat="svg"' -s 'outputtemplate="%j.svg"' -mem=internalvars \
--s 'finalscale=100' plan_tree_01.mp
+-tex ../mpcache plan_tree_01.mp
 
 
 This file is part of MetaPostgres.

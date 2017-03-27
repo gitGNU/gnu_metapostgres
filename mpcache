@@ -1,0 +1,46 @@
+#!/bin/sh
+#
+# Copyright (C) 2017 Antonin Houska
+#
+# This file is part of MetaPostgres.
+#
+# MetaPostgres is free software: you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by the Free
+# Software Foundation, either version 3 of the License, or (at your option)
+# any later version.
+#
+# MetaPostgres is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+# FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+# more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with MetaPostgres. If not, see <http://www.gnu.org/licenses/>.
+#
+#
+# mpcache is an utility that provides MetaPost with DVI files representing
+# labels. It ensures that TeX processes each unique label only once.
+#
+# Note: "mpcache" does not expect concurrent calls. Fix this if trying to run
+# "make" in multiple threads.
+
+# The DVI files are cached in this directory.
+MPCACHE=~/.mpcache
+
+INPUT=$1
+ENTRY=$(cat $INPUT | md5sum | awk '{print $1}')
+OUTPUT=${INPUT/".tex"/".dvi"}
+if [ ! -d $MPCACHE ];
+then
+   mkdir $MPCACHE
+fi
+
+DVI=${INPUT/".tex"/".dvi"}
+ if [ ! -f $MPCACHE/$ENTRY ]
+then
+    tex $INPUT
+    cp $DVI $MPCACHE/$ENTRY
+else
+    cp $MPCACHE/$ENTRY $DVI
+fi
+
