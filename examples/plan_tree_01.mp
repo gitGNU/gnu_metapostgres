@@ -26,7 +26,7 @@ beginfig(0);
   createtable(2, 3);
   settablename("licenses");
   addheader("id");
-  addheader("license");
+  addheader("name");
   addheader("is\_copyleft")
   setcolalignments(r,l,l);
   setcolumn(1, 0, "1");
