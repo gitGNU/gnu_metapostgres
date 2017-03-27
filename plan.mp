@@ -54,6 +54,10 @@ numeric planpenwidth, arrowpenwidth;
 planpenwidth := 1;
 arrowpenwidth := .5;
 
+% If arrow changes direction, this variable controls sharpness of the break.
+numeric arrowelbowradius;
+arrowelbowradius = 6pt;
+
 def adjustplanpens =
   planpen := pencircle scaled (planpenwidth / metapg.scalefactor);
   arrowpen := pencircle scaled (arrowpenwidth / metapg.scalefactor);
@@ -176,18 +180,50 @@ def drawplannode(suffix pidx) =
   fi;
 enddef;
 
-% Draw arrow from the input table to the plan.
+% Draw arrow from the input table to generic plan.
 def drawsimpleplaninputarrow(text _plan)(text _input) =
   pickup arrowpen;
 
   drawarrow _input.n -- _plan.lefttree;
 enddef;
 
+% Draw arrow from the input table to join plan.
+def drawjoininputarrow(expr _from, _to) =
+  % The lower vertical line.
+  draw _from--(xpart _from, ypart (.5[_from, _to]) - arrowelbowradius);
+
+  if xpart _from < xpart _to:
+    % The elbow from vertical to horizontal direction.
+    draw (xpart _from, ypart (.5[_from, _to]) - arrowelbowradius){0,1}..
+      {1, 0}(xpart _from + arrowelbowradius, ypart (.5[_from, _to]));
+
+    % Horizontal line.
+    draw (xpart _from + arrowelbowradius, ypart (.5[_from, _to]))--
+      (xpart _to - arrowelbowradius, ypart (.5[_from, _to]));
+
+    % The elbow from horizontal to vertical direction.
+    draw (xpart _to - arrowelbowradius, ypart (.5[_from, _to])){1, 0}..
+      {0, 1}(xpart _to, ypart (.5[_from, _to]) + arrowelbowradius);
+  else:
+    draw (xpart _from, ypart (.5[_from, _to]) - arrowelbowradius){0, 1}..
+      {-1, 0}(xpart _from - arrowelbowradius, ypart (.5[_from, _to]));
+
+    draw (xpart _from - arrowelbowradius, ypart(.5[_from, _to]))--
+      (xpart _to + arrowelbowradius, ypart (.5[_from, _to]));
+
+    draw (xpart _to + arrowelbowradius, ypart (.5[_from, _to])){-1, 0}..
+      {0, 1}(xpart _to, ypart (.5[_from, _to]) + arrowelbowradius);
+  fi;
+
+  % The upper vertical line.
+  drawarrow (xpart _to, ypart (.5[_from, _to]) + arrowelbowradius)--_to;
+enddef;
+
 def drawjoininputarrows(text _plan)(text _left)(text _right) =
   pickup arrowpen;
 
-  drawarrow _left.n -- _plan.lefttree;
-  drawarrow _right.n -- _plan.righttree;
+  drawjoininputarrow(_left.n, _plan.lefttree);
+  drawjoininputarrow(_right.n, _plan.righttree);
 enddef;
 
 % Draw arrow from the plan node to the output table.
