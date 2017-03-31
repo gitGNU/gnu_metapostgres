@@ -58,6 +58,10 @@ arrowpenwidth := .5;
 numeric arrowelbowradius;
 arrowelbowradius = 6pt;
 
+color planbgcolor, planlblcolor;
+planbgcolor := hexrgbcolor("7B")("F9")("90");
+planlblcolor := hexrgbcolor("4D")("CA")("6F");
+
 def adjustplanpens =
   planpen := pencircle scaled (planpenwidth / metapg.scalefactor);
   arrowpen := pencircle scaled (arrowpenwidth / metapg.scalefactor);
@@ -169,13 +173,21 @@ def attachjoininputs(text node)(text left)(text right) =
 enddef;
 
 def drawplannode(suffix pidx) =
+  path	pth;
+
   pickup planpen;
 
-  draw plannodes.pidx.sw--plannodes.pidx.nw--plannodes.pidx.ne--
+  pth := plannodes.pidx.sw--plannodes.pidx.nw--plannodes.pidx.ne--
     plannodes.pidx.se--cycle;
+  draw pth;
+  fill pth withcolor planbgcolor;
 
   drawlabel(plannodes.pidx.name);
   if known plannodes.pidx.qual:
+    pth := plannodes.pidx.qual.sw--plannodes.pidx.qual.nw--
+      plannodes.pidx.qual.ne-- plannodes.pidx.qual.se--cycle;
+    draw pth;
+    fill pth withcolor planlblcolor;
     drawlabel(plannodes.pidx.qual);
   fi;
 enddef;

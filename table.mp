@@ -79,6 +79,13 @@ pen tablepen;
 numeric tablepenwidth;
 tablepenwidth := 1;
 
+color tablebgcolor, tablehdrcolor, tablecellcolor, tablelblcolor;
+
+tablebgcolor := hexrgbcolor("F2")("ED")("87");
+tablehdrcolor := hexrgbcolor("C2")("AD")("94");
+tablecellcolor := hexrgbcolor("FF")("E3")("C2");
+tablelblcolor := hexrgbcolor("C2")("AA")("6C");
+
 def adjusttablepens =
   tablepen := pencircle scaled (tablepenwidth / metapg.scalefactor);
 enddef;
@@ -194,8 +201,15 @@ def drawtable(suffix tidx) =
   picture celltext;
   pair	cellshift;
   numeric cellshiftx;
+  path	pth;
 
   pickup tablepen;
+
+  % Bounding box of the table.
+  pth := tables.tidx.sw--tables.tidx.nw--tables.tidx.ne--tables.tidx.se--
+    cycle;
+  draw pth;
+  fill pth withcolor tablebgcolor;
 
   rowwidth := 0;
   for i=0 upto tables.tidx.ncols - 1:
@@ -203,21 +217,27 @@ def drawtable(suffix tidx) =
   endfor;
 
   for i=0 upto tables.tidx.nrows:
+    % South-west corner of the current cell.
     cell_sw := tables.tidx.sw +
       (tbouterspacing, tbouterspacing + tables.tidx.row[i].off);
-    draw cell_sw--cell_sw + (0, tbcellheight);
 
     for j=0 upto tables.tidx.ncols - 1:
       cellwidth := tables.tidx.width[j];
       cell_swnext := cell_sw + (cellwidth, 0);
-      draw cell_sw--cell_swnext--cell_swnext + (0, tbcellheight)--
-	cell_sw + (0, tbcellheight);
+
+      pth := cell_sw--cell_swnext--cell_swnext + (0, tbcellheight)--
+	cell_sw + (0, tbcellheight)--cycle;
+      draw pth;
+
+      if i = 0:
+	fill pth withcolor tablehdrcolor;
+      else:
+	fill pth withcolor tablecellcolor;
+      fi;
+
       cell_sw := cell_swnext;
     endfor;
   endfor;
-
-  % Bounding box of the table.
-  draw tables.tidx.sw--tables.tidx.nw--tables.tidx.ne--tables.tidx.se--cycle;
 
   % Labels.
   for i=0 upto tables.tidx.nrows:
@@ -251,8 +271,10 @@ def drawtable(suffix tidx) =
   endfor;
 
   if known tables.tidx.name:
-    draw tables.tidx.name.sw--tables.tidx.name.nw--tables.tidx.name.ne--
+    pth := tables.tidx.name.sw--tables.tidx.name.nw--tables.tidx.name.ne--
       tables.tidx.name.se--cycle;
+    draw pth;
+    fill pth withcolor tablelblcolor;
     drawlabel(tables.tidx.name);
   fi;
 enddef;
