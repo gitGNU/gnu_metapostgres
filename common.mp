@@ -90,22 +90,30 @@ enddef;
 % computescalefactor() is needed.
 pair	metapg.bbox.sw, metapg.bbox.nw, metapg.bbox.ne, metapg.bbox.se;
 
+% This dimension ensures that no valid line exceeds the picture border, even
+% though it's very thick.
+numeric pictureborder;
+pictureborder := 4pt;
+
 % Derive the bounding box from north-east and south-west corners.
 %
 % XXX If another pair of corners seems useful for some pictures, make the name
 % of this macro more specific and define additional one.
 def initboundingbox(text _nw, _se) =
-  metapg.bbox.nw := _nw;
-  metapg.bbox.se := _se;
+  metapg.bbox.nw := _nw + (- pictureborder, pictureborder);
+  metapg.bbox.se := _se + (pictureborder, - pictureborder);
 
-  metapg.bbox.sw := (xpart _nw, ypart _se);
-  metapg.bbox.ne := (xpart _se, ypart _nw);
+  metapg.bbox.sw := (xpart _nw - pictureborder, ypart _se - pictureborder);
+  metapg.bbox.ne := (xpart _se + pictureborder, ypart _nw + pictureborder);
 enddef;
 
-% The actual box will hardly find its way to pictures, but it can be useful
-% to draw it for verification.
+% The actual box is not too useful as such, but if by drawing it in the
+% background color we ensure that nothing of the picture is lost --- see the
+% comment on pictureborder above. In particular, missing part (half?) of line
+% was observed while using the picture in PDF document.
 def drawboundingbox =
-  draw metapg.bbox.nw--metapg.bbox.ne--metapg.bbox.se--metapg.bbox.sw--cycle;
+  draw metapg.bbox.nw--metapg.bbox.ne--metapg.bbox.se--metapg.bbox.sw--cycle
+    withpen pencircle withcolor white;
 enddef;
 
 % The scalefactor is used to keep thickness of lines if the whole picture gets
