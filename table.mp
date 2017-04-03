@@ -50,9 +50,8 @@ tbouterspacing := 8pt;
 % Corners of the table bounding box respectively.
 pair tables[].sw, tables[].se, tables[].ne, tables[].nw;
 
-% The middle of the south and north edges. (Western and easter are not needed
-% -- add them when / if needed.)
-pair tables[].s, tables[].n;
+% The middle of the south, west, north and east edges.
+pair tables[].s, tables[].w, tables[].n, tables[].e;
 
 % Vertical distance of the south edge of a row from the south edge of the last
 % row.
@@ -191,8 +190,11 @@ def finalizetable(suffix tidx) =
   xpart tables.tidx.ne = xpart tables.tidx.se;
   ypart tables.tidx.ne = ypart tables.tidx.nw;
 
+  % Middle points of edges.
   tables.tidx.s = 0.5[tables.tidx.se, tables.tidx.sw];
   tables.tidx.n = 0.5[tables.tidx.ne, tables.tidx.nw];
+  tables.tidx.e = 0.5[tables.tidx.se, tables.tidx.ne];
+  tables.tidx.w = 0.5[tables.tidx.sw, tables.tidx.nw];
 enddef;
 
 def drawtable(suffix tidx) =
